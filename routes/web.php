@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\Admin\DashboardController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\LessonController;
+use App\Http\Controllers\Admin\DashboardController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -14,5 +15,8 @@ Route::prefix('admin')->group(function () {
     Route::group(['middleware' => ['auth']], function () {
         //Route Dashboard
         Route::get('/dashboard', DashboardController::class)->name('admin.dashboard');
+
+        //Route Resource Lessons
+        Route::resource('/lessons', LessonController::class, ['as' => 'admin']);
     });
 });
