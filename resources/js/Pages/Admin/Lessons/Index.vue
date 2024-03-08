@@ -73,7 +73,23 @@
                                             }}
                                         </td>
                                         <td>{{ lesson.title }}</td>
-                                        <td class="text-center"></td>
+                                        <td class="text-center">
+                                            <Link
+                                                :href="`/admin/lessons/${lesson.id}/edit`"
+                                                class="btn btn-sm btn-info border-0 shadow me-2"
+                                                type="button"
+                                            >
+                                                <i class="fa fa-pencil-alt"></i>
+                                            </Link>
+                                            <button
+                                                @click.prevent="
+                                                    destroy(lesson.id)
+                                                "
+                                                class="btn btn-sm btn-danger border-0"
+                                            >
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -101,6 +117,9 @@ import { ref } from "vue";
 
 //import inertia adapter
 import { Inertia } from "@inertiajs/inertia";
+
+//import Sweeet Alert
+import Swal from "sweetalert2";
 
 export default {
     //layout
@@ -133,10 +152,36 @@ export default {
             });
         };
 
+        //define method destroy
+        const destroy = (id) => {
+            Swal.fire({
+                title: "Apakah Anda yakin?",
+                text: "Anda tidak akan dapat mengembalikan ini!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Inertia.delete(`/admin/lessons/${id}`);
+
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "Pelajaran Berhasil Dihapus!.",
+                        icon: "success",
+                        timer: 2000,
+                        showConfirmButton: false,
+                    });
+                }
+            });
+        };
+
         //return data
         return {
             search,
             handleSearch,
+            destroy,
         };
     },
 };

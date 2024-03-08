@@ -73,7 +73,7 @@
 import LayoutAuth from "../../Layouts/Auth.vue";
 
 //import Head from Inertia
-import { Head } from "@inertiajs/inertia-vue3";
+import { Head, Link } from "@inertiajs/inertia-vue3";
 
 //import reactive
 import { reactive } from "vue";
@@ -87,6 +87,7 @@ export default {
     //register component
     components: {
         Head,
+        Link,
     },
 
     //props

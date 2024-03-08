@@ -2,6 +2,8 @@
 
 namespace App\Http\Responses;
 
+use Inertia\Inertia;
+use Illuminate\Http\JsonResponse;
 use Laravel\Fortify\Contracts\LogoutResponse as LogoutResponseContract;
 
 class LogoutResponse implements LogoutResponseContract
@@ -15,6 +17,6 @@ class LogoutResponse implements LogoutResponseContract
      */
     public function toResponse($request)
     {
-        return redirect('/');
+        return redirect('login');
     }
 }

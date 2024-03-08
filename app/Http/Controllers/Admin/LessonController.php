@@ -49,7 +49,7 @@ class LessonController extends Controller
         ]);
 
         //redirect
-        return redirect()->route('admin.lesson.index');
+        return redirect()->route('admin.lessons.index');
     }
 
     /**
