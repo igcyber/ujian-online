@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\LessonController;
+use App\Http\Controllers\Admin\ClassroomController;
 use App\Http\Controllers\Admin\DashboardController;
 
 Route::get('/', function () {
@@ -18,5 +19,8 @@ Route::prefix('admin')->group(function () {
 
         //Route Resource Lessons
         Route::resource('/lessons', LessonController::class, ['as' => 'admin']);
+
+        //Route Resource Classrooms
+        Route::resource('/classrooms', ClassroomController::class, ['as' => 'admin']);
     });
 });
