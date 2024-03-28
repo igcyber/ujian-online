@@ -101,7 +101,25 @@
                                             {{ student.gender }}
                                         </td>
                                         <td>{{ student.password }}</td>
-                                        <td class="text-center"></td>
+                                        <td class="text-center">
+                                            <Link
+                                                title="Ubah Data"
+                                                :href="`/admin/students/${student.id}/edit`"
+                                                class="btn btn-sm btn-info border-0 shadow me-2"
+                                                type="button"
+                                            >
+                                                <i class="fa fa-pencil-alt"></i>
+                                            </Link>
+                                            <button
+                                                title="Hapus Data"
+                                                @click.prevent="
+                                                    destroy(student.id)
+                                                "
+                                                class="btn btn-sm btn-danger border-0"
+                                            >
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -124,6 +142,8 @@ import { Head, Link } from "@inertiajs/inertia-vue3";
 import { ref } from "vue";
 //import inertia adapter
 import { Inertia } from "@inertiajs/inertia";
+//import Swal Alert
+import Swal from "sweetalert2";
 export default {
     layout: LayoutAdmin,
 
@@ -153,9 +173,35 @@ export default {
             });
         };
 
+        //define method destroy
+        const destroy = (id) => {
+            Swal.fire({
+                title: "Apakah Anda yakin?",
+                text: "Anda tidak akan dapat mengembalikan ini!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Inertia.delete(`/admin/students/${id}`);
+
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "Siswa Berhasil Dihapus!.",
+                        icon: "success",
+                        timer: 2000,
+                        showConfirmButton: false,
+                    });
+                }
+            });
+        };
+
         return {
             search,
             handleSearch,
+            destroy,
         };
     },
 };

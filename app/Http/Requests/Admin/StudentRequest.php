@@ -29,24 +29,28 @@ class StudentRequest extends FormRequest
      */
     public function rules(): array
     {
-        if ($this->isMethod('post')) {
-            $rules = [
-                'name' => 'required|string|max:255',
-                'nisn' => 'required|unique:students',
-                'gender' => 'required|string',
-                'password' => 'required|confirmed',
-                'classroom_id' => 'required'
-            ];
-        } elseif ($this->isMethod('put')) {
-            $rules = [
-                'name' => 'required|string|max:255',
-                'nisn' => 'required|unique:students,nisn,' . $this->student->id,
-                'gender' => 'required|string',
-                'classroom_id' => 'required',
-                'password' => 'confirmed'
-            ];
-        }
+        $rules = [
+            'name' => 'required|string|max:255',
+            'nisn' => 'required|unique:students',
+            'gender' => 'required|string',
+            'password' => 'required|confirmed',
+            'classroom_id' => 'required'
+        ];
 
         return $rules;
+    }
+
+    public function messages()
+    {
+        return [
+            'name.required' => 'Nama Siswa Wajib Terisi',
+            'name.max' => 'Maksimal Karakter 255',
+            'nisn.required' => 'NISN Wajib Terisi',
+            'nisn.unique' => 'NISN Sudah Digunakan',
+            'gender.required' => 'Jenis Kelamin Wajib Dipilih',
+            'password.required' => 'Password Wajib Terisi',
+            'password.confirmed' => 'Konfirmasi Password Tidak Sesuai',
+            'classroom_id.required' => 'Kelas Wajib Dipilih'
+        ];
     }
 }

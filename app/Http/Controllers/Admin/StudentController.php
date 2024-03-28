@@ -19,7 +19,7 @@ class StudentController extends Controller
         //search based on request q and get the data
         $students = Student::when(request()->q, function ($students) {
             $students = $students->where('name', 'like', '%' . request()->q . '%');
-        })->with('classoom')->latest()->paginate(10);
+        })->with('classroom')->latest()->paginate(10);
 
         //append query string to pagination links
         $students->appends(['q' => request()->q]);
@@ -48,17 +48,11 @@ class StudentController extends Controller
      */
     public function store(StudentRequest $request)
     {
-        //validate Student Request
-        $request->validate();
+        //validated Student Request
+        $validateData = $request->validated();
 
         //create student
-        Student::create([
-            'name' => $request->name,
-            'nisn' => $request->nisn,
-            'gender' => $request->gender,
-            'password' => $request->password,
-            'classroom_id' => $request->classroom_id
-        ]);
+        Student::create($validateData);
 
         //redirect after data created
         return redirect()->route('admin.students.index');
@@ -85,16 +79,22 @@ class StudentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(StudentRequest $request, Student $student)
+    public function update(Request $request, Student $student)
     {
-        //validate request
-        $request->validate();
+        //Validate request
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'nisn' => 'required|unique:students,nisn,' . $student->id,
+            'gender' => 'required|string',
+            'classroom_id' => 'required',
+            'password' => 'confirmed'
+        ]);
 
         //catch $password
         $password = $request->password;
 
         //check password
-        if ($password = "") {
+        if ($password == "") {
 
             DB::transaction(function () use ($request, $student) {
                 $data = [
